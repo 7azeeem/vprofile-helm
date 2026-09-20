@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpromq01
+  labels:
+    app: vpromq01
+spec:
+  replicas: {{ .Values.rabbitmq.replicas }}
+  selector:
+    matchLabels:
+      app: vpromq01
+  template:
+    metadata:
+      labels:
+        app: vpromq01
+    spec:
+      containers:
+        - name: vpromq01
+          image: {{ .Values.rabbitmq.image }}:{{ .Values.rabbitmq.tag }}
+          ports:
+            - name: vpromq01-port
+              containerPort: {{ .Values.rabbitmq.containerPort }}
+          env:
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: rmq-pass
+            - name: RABBITMQ_DEFAULT_USER
+              value: "{{ .Values.defaultUser }}"

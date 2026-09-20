@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vproapp
+  labels:
+    app: vproapp
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: vproapp
+  template:
+    metadata:
+      labels:
+        app: vproapp
+    spec:
+{{- if .Values.dockerregistry.enabled }}
+      imagePullSecrets:
+        - name: docker-registry-secret
+{{- end }}
+      initContainers:
+        - name: init-mydb
+          image: {{ .Values.initcontainers.image }}
+          command:
+            - sh
+            - -c
+            - |
+              until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;
+        - name: init-memcache
+          image: {{ .Values.initcontainers.image }}
+          command:
+            - sh
+            - -c
+            - |
+              until nslookup vprocache01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for memcache; sleep 2; done;
+      containers:
+        - name: vproapp
+          image: {{ .Values.app.image }}:{{ .Values.app.tag }}
+          imagePullPolicy: Always
+          ports:
+            - name: vproapp-port
+              containerPort: {{ .Values.app.containerPort }}
