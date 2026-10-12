@@ -204,7 +204,3 @@ Items needing attention:
 | PVC remains Pending | Inspect `kubectl describe pvc db-pv-claim -n vprofile`; verify the `gp2` StorageClass and provisioner. |
 | No ALB / ingress address | Inspect `kubectl describe ingress vpro-ingress -n vprofile` and AWS Load Balancer Controller logs; verify controller IAM, subnets, class, and annotations. |
 | TLS/certificate error | Verify `<ACM_CERTIFICATE_ARN>` identifies an issued regional certificate covering the configured hostname. |
-
-## Related repositories
-
-The checked-out Git remote is [7azeeem/vprofile-helm](https://github.com/7azeeem/vprofile-helm). No Infrastructure or Application repository URL is defined in the inspected files, so none is linked here.
