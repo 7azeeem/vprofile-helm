@@ -208,7 +208,3 @@ Items needing attention:
 ## Related repositories
 
 The checked-out Git remote is [7azeeem/vprofile-helm](https://github.com/7azeeem/vprofile-helm). No Infrastructure or Application repository URL is defined in the inspected files, so none is linked here.
-
-## License
-
-No license file or license declaration is present in this repository.
